@@ -1,0 +1,23 @@
+best quality, perfect lighting, forest with mountains, manga, lord of the ring,fantasy medival city,
+Negative prompt: (longbody),(extra fingers), (missing fingers), (extra limb), (bad anatomy), (bad proportions),(worst quality, low quality, blurry:1.4), big breast, window
+Steps: 20, Sampler: Euler a, CFG scale: 7, Seed: 982592381, Size: 512x512, Model hash: 99d9ce8a35, Model: El Diablo
+
+best quality, perfect lighting, hospital, sick boy, dying, window
+Negative prompt: (longbody),(extra fingers), (missing fingers), (extra limb), (bad anatomy), (bad proportions),(worst quality, low quality, blurry:1.4), big breast,
+Steps: 20, Sampler: Euler a, CFG scale: 7, Seed: 982592388, Size: 512x512, Model hash: 99d9ce8a35, Model: El Diablo
+
+best quality, perfect lighting, hospital, heart monitor stopped, family members cry, depressing, blue tone, dead
+Negative prompt: (longbody),(extra fingers), (missing fingers), (extra limb), (bad anatomy), (bad proportions),(worst quality, low quality, blurry:1.4), big breast,
+Steps: 20, Sampler: Euler a, CFG scale: 7, Seed: 982592384, Size: 512x512, Model hash: 99d9ce8a35, Model: El Diablo
+
+best quality, perfect lighting, hospital porch building, depressing, blue tone, red cross
+Negative prompt: (longbody),(extra fingers), (missing fingers), (extra limb), (bad anatomy), (bad proportions),(worst quality, low quality, blurry:1.4), big breast,
+Steps: 20, Sampler: Euler a, CFG scale: 7, Seed: 982592388, Size: 512x512, Model hash: 99d9ce8a35, Model: El Diablo
+
+best quality, perfect lighting, hospital bed, trees outside window, depressing, blue tone,
+Negative prompt: (longbody),(extra fingers), (missing fingers), (extra limb), (bad anatomy), (bad proportions),(worst quality, low quality, blurry:1.4), big breast,
+Steps: 20, Sampler: Euler a, CFG scale: 7, Seed: 982592384, Size: 512x512, Model hash: 99d9ce8a35, Model: El Diablo
+
+best quality, perfect lighting, manga, forest and mountains, sunlight, fantasy,river
+best quality, perfect lighting, manga, forest, sunlight, fantasy,village entrance, white hair
+best quality, perfect lighting, manga, forest and mountains, sunlight, fantasy,

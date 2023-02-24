@@ -1,0 +1,10 @@
+best quality, perfect lighting, shiny skin, manga , looking at the viewer, forest ruins, golden black magical medival armor, exposed belly,white hair, golden eyes,long hair
+Negative prompt: (longbody),(extra fingers), (missing fingers), (extra limb), (bad anatomy), (bad proportions),(worst quality, low quality, blurry:1.4), big breast
+Steps: 20, Sampler: Euler a, CFG scale: 7, Seed: 2454023504, Size: 512x512, Model hash: 99d9ce8a35, Model: El Diablo, ControlNet Enabled: True, ControlNet Module: openpose, ControlNet Model: control_sd15_openpose [fef5e48e], ControlNet Weight: 1, ControlNet Guidance Strength: False
+
+
+best quality, perfect lighting, shiny skin, manga , looking at the viewer, forest ruins, golden black magical medival armor, exposed belly,white hair, golden eyes,long hair
+Negative prompt: (longbody),(extra fingers), (missing fingers), (extra limb), (bad anatomy), (bad proportions),(worst quality, low quality, blurry:1.4), big breast,no pony tail
+Steps: 20, Sampler: Euler a, CFG scale: 7, Seed: 1840723039, Size: 512x512, Model hash: 99d9ce8a35, Model: El Diablo, Denoising strength: 0.55, Mask blur: 4, ControlNet Enabled: True, ControlNet Module: openpose, ControlNet Model: control_sd15_openpose [fef5e48e], ControlNet Weight: 1.5, ControlNet Guidance Strength: False
+
+

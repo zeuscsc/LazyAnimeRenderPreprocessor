@@ -33,7 +33,7 @@ def mask(path:str,output_path:str,background_image:np.ndarray=None):
                 
             last_frame=np.where(condition, fg_image, bg_image)
         else:
-            np.array(background_image)
+            background_image=np.array(background_image)
             bg_image = cv2.resize(background_image, (image_width, image_height))
             output_image = np.where(condition, image, bg_image)
 

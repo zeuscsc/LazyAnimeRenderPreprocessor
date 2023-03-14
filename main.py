@@ -8,6 +8,8 @@ from crop import crop
 from tqdm import tqdm
 from parallel_tasks_queuer import build_and_execute
 
+REFRENCE_IMAGE=None
+
 def mask_pbar_wrapper(*args):
     mask(*args)
     mask_pbar.update(1)
@@ -16,15 +18,14 @@ def crop_pbar_wrapper(*args):
     crop_pbar.update(1)
 def crop_iterator_generator(file,output_path,square=False):
     crop_iterator=[]
-    image_height=image_width=768
+    refrence_height=refrence_width=768
     if square is False:
-        image = Image.open(file)
-        image_width,image_height = image.size
-    if image_height > image_width:
+        refrence_width,refrence_height = REFRENCE_IMAGE.size
+    if refrence_height > refrence_width:
         crop_iterator.append((file,output_path,512,768))
-    if image_height < image_width:
+    if refrence_height < refrence_width:
         crop_iterator.append((file,output_path,768,512))
-    if image_height == image_width or square:
+    if refrence_height == refrence_width or square:
         crop_iterator.append((file,output_path,768,768))
     return crop_iterator
 
@@ -56,6 +57,8 @@ if __name__ == '__main__':
     mask_iterator=[]
     for file in tqdm(files):
         filename = os.path.basename(file)
+        if REFRENCE_IMAGE is None:
+            REFRENCE_IMAGE = Image.open(file)
         cropped_path = f'{cropped_folder}/{filename}'
         crop_iterator+=crop_iterator_generator(file,cropped_path)
         masked_path = f'{masked_folder}/{filename}'

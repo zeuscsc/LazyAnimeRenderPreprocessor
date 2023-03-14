@@ -67,7 +67,7 @@ if __name__ == '__main__':
         # mask(cropped_path,masked_path,None)
     print("Cropping images...")
     with tqdm(total=len(crop_iterator)) as crop_pbar:
-        build_and_execute(crop_iterator,crop_pbar_wrapper,6,True,0)
+        build_and_execute(crop_iterator,crop_pbar_wrapper,16,True,0)
     print("Masking images...")
     with tqdm(total=len(mask_iterator)) as mask_pbar:
-        build_and_execute(mask_iterator,mask_pbar_wrapper,6,True,0)
+        build_and_execute(mask_iterator,mask_pbar_wrapper,16,True,0)

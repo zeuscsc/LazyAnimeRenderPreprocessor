@@ -6,6 +6,15 @@ import glob
 from mask import mask
 from crop import crop
 from tqdm import tqdm
+from parallel_tasks_queuer import build_and_execute
+
+def mask_pbar_wrapper(*args):
+    mask(*args)
+    mask_pbar.update(1)
+def crop_pbar_wrapper(*args):
+    crop(*args)
+    crop_pbar.update(1)
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -30,21 +39,35 @@ if __name__ == '__main__':
         os.makedirs(cropped_folder)
     if not os.path.exists(inputs_folder):
         os.makedirs(inputs_folder)
+    print("Preparing threads queue...")
+    crop_iterator=[]
+    mask_iterator=[]
     for file in tqdm(files):
         filename = os.path.basename(file)
         image = cv2.imread(file)
         image_height, image_width, _ = image.shape
         cropped_path = f'{cropped_folder}/{filename}'
         if image_height > image_width:
-            crop(file,cropped_path,512,768)
+            # crop(file,cropped_path,512,768)
+            crop_iterator.append((file,cropped_path,512,768))
         if image_height < image_width:
-            crop(file,cropped_path,768,512)
+            # crop(file,cropped_path,768,512)
+            crop_iterator.append((file,cropped_path,768,512))
         if image_height == image_width:
-            crop(file,cropped_path,768,768)
+            # crop(file,cropped_path,768,768)
+            crop_iterator.append((file,cropped_path,768,768))
         masked_path = f'{masked_folder}/{filename}'
         background_image=None
         if background_image_path is not None:
             background_image = cv2.imread(background_image_path)
             inputs_path = f'{inputs_folder}/{filename}'
-            mask(cropped_path,inputs_path,background_image)
-        mask(cropped_path,masked_path,None)
+            mask_iterator.append((cropped_path,inputs_path,background_image))
+            # mask(cropped_path,inputs_path,background_image)
+        mask_iterator.append((cropped_path,masked_path,None))
+        # mask(cropped_path,masked_path,None)
+    print("Cropping images...")
+    with tqdm(total=len(crop_iterator)) as crop_pbar:
+        build_and_execute(crop_iterator,crop_pbar_wrapper,6,True,0)
+    print("Masking images...")
+    with tqdm(total=len(mask_iterator)) as mask_pbar:
+        build_and_execute(mask_iterator,mask_pbar_wrapper,6,True,0)

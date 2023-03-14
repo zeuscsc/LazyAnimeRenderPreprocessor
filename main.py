@@ -64,7 +64,8 @@ if __name__ == '__main__':
             REFRENCE_IMAGE = Image.open(file)
         cropped_path = f'{cropped_folder}/{filename}'
         crop_iterator+=crop_iterator_generator(file,cropped_path)
-        crop_iterator+=crop_iterator_generator(file,train_ds_folder,True)
+        train_ds_path = f'{train_ds_folder}/{filename}'
+        crop_iterator+=crop_iterator_generator(file,train_ds_path,True)
         masked_path = f'{masked_folder}/{filename}'
         background_image=None
         if background_image_path is not None:

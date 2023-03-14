@@ -26,7 +26,7 @@ def crop_iterator_generator(file,output_path,square=False):
     if refrence_height < refrence_width:
         crop_iterator.append((file,output_path,768,512))
     if refrence_height == refrence_width or square:
-        crop_iterator.append((file,output_path,768,768))
+        crop_iterator.append((file,output_path,512,512))
     return crop_iterator
 
 if __name__ == '__main__':

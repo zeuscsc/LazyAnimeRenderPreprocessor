@@ -11,7 +11,10 @@ mp_selfie_segmentation = mp.solutions.selfie_segmentation
 BG_COLOR = (0, 0, 0) # black
 MASK_COLOR = (255, 255, 255) # white
 
+last_frame = None
+
 def mask(path:str,output_path:str,background_image:np.ndarray=None):
+    global last_frame
     with mp_selfie_segmentation.SelfieSegmentation(
         model_selection=0) as selfie_segmentation:
         image = Image.open(path)
@@ -25,11 +28,15 @@ def mask(path:str,output_path:str,background_image:np.ndarray=None):
             bg_image = np.zeros(image.shape, dtype=np.uint8)
             bg_image[:] = BG_COLOR
             output_image = np.where(condition, fg_image, bg_image)
+            if last_frame is not None:
+                output_image=cv2.bitwise_or(output_image,last_frame)
+                
+            last_frame=np.where(condition, fg_image, bg_image)
         else:
             np.array(background_image)
             bg_image = cv2.resize(background_image, (image_width, image_height))
             output_image = np.where(condition, image, bg_image)
-        # cv2.imwrite(f'{output_path}', output_image)
+
         Image.fromarray(output_image).save(f'{output_path}')
 
 

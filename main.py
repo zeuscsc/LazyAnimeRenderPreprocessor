@@ -57,16 +57,16 @@ if __name__ == '__main__':
     for file in tqdm(files):
         filename = os.path.basename(file)
         cropped_path = f'{cropped_folder}/{filename}'
-        crop_iterator+=crop_iterator_generator(file,cropped_path,True)
+        crop_iterator+=crop_iterator_generator(file,cropped_path)
         masked_path = f'{masked_folder}/{filename}'
         background_image=None
         if background_image_path is not None:
             background_image=Image.open(background_image_path)
             inputs_path = f'{inputs_folder}/{filename}'
             mask_iterator.append((file,inputs_path,background_image))
-            crop_iterator+=crop_iterator_generator(inputs_path,inputs_path,True)
+            crop_iterator+=crop_iterator_generator(inputs_path,inputs_path)
         mask_iterator.append((file,masked_path,None))
-        crop_iterator+=crop_iterator_generator(masked_path,masked_path,True)
+        crop_iterator+=crop_iterator_generator(masked_path,masked_path)
     print("Masking images...")
     with tqdm(total=len(mask_iterator)) as mask_pbar:
         build_and_execute(mask_iterator,mask_pbar_wrapper,16,True,0)

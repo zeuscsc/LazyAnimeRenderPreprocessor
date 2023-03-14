@@ -5,21 +5,13 @@ import os
 import glob
 import argparse
 
-if __name__ == '__main__':
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--image_path","-f", type=str, default=None,
-                        help="image path")
-    args = parser.parse_args()
-    path=args.image_path
-    if path is None:
-        print("Please provide image path")
-        exit(1)
-    mp_drawing = mp.solutions.drawing_utils
-    mp_selfie_segmentation = mp.solutions.selfie_segmentation
+mp_drawing = mp.solutions.drawing_utils
+mp_selfie_segmentation = mp.solutions.selfie_segmentation
 
-    BG_COLOR = (0, 0, 0) # black
-    MASK_COLOR = (255, 255, 255) # white
+BG_COLOR = (0, 0, 0) # black
+MASK_COLOR = (255, 255, 255) # white
 
+def mask(path:str,output_path:str):
     with mp_selfie_segmentation.SelfieSegmentation(
         model_selection=0) as selfie_segmentation:
         image = cv2.imread(path)
@@ -32,9 +24,20 @@ if __name__ == '__main__':
         bg_image = np.zeros(image.shape, dtype=np.uint8)
         bg_image[:] = BG_COLOR
         output_image = np.where(condition, fg_image, bg_image)
+        cv2.imwrite(f'{output_path}', output_image)
 
-        folder_path = os.path.dirname(path)
-        filename = os.path.basename(path)
-        base_name, extension = os.path.splitext(filename)
-        new_filename = base_name+"_masked" + ".png"
-        cv2.imwrite(f'{folder_path}/{new_filename}', output_image)
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--image_path","-f", type=str, default=None,
+                        help="image path")
+    args = parser.parse_args()
+    path=args.image_path
+    if path is None:
+        print("Please provide image path")
+        exit(1)
+
+    filename = os.path.basename(path)
+    base_name, extension = os.path.splitext(filename)
+    new_filename = base_name+"_masked" + ".png"
+    mask(path,new_filename)

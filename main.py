@@ -16,16 +16,20 @@ def mask_pbar_wrapper(*args):
 def crop_pbar_wrapper(*args):
     crop(*args)
     crop_pbar.update(1)
-def crop_iterator_generator(file,output_path,square=False):
+def crop_iterator_generator(file,output_path,square=False,train_ds=False):
     crop_iterator=[]
     refrence_height=refrence_width=768
     if square is False:
         refrence_width,refrence_height = REFRENCE_IMAGE.size
+    if train_ds is True:
+        refrence_height=refrence_width=512
     if refrence_height > refrence_width:
         crop_iterator.append((file,output_path,512,768))
     if refrence_height < refrence_width:
         crop_iterator.append((file,output_path,768,512))
-    if refrence_height == refrence_width or square:
+    if refrence_height == refrence_width and train_ds is False:
+        crop_iterator.append((file,output_path,768,768))
+    if train_ds is True:
         crop_iterator.append((file,output_path,512,512))
     return crop_iterator
 
@@ -65,7 +69,7 @@ if __name__ == '__main__':
         cropped_path = f'{cropped_folder}/{filename}'
         crop_iterator+=crop_iterator_generator(file,cropped_path)
         train_ds_path = f'{train_ds_folder}/{filename}'
-        crop_iterator+=crop_iterator_generator(file,train_ds_path,True)
+        crop_iterator+=crop_iterator_generator(file,train_ds_path,train_ds=True)
         masked_path = f'{masked_folder}/{filename}'
         background_image=None
         if background_image_path is not None:

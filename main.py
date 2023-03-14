@@ -1,4 +1,5 @@
 import argparse
+from math import floor
 import subprocess
 import os
 from PIL import Image
@@ -60,6 +61,8 @@ if __name__ == '__main__':
     if not os.path.exists(train_ds_folder):
         os.makedirs(train_ds_folder)
     print("Preparing threads queue...")
+    sampling=floor(len(files)/20)
+    index=0
     crop_iterator=[]
     mask_iterator=[]
     for file in tqdm(files):
@@ -69,7 +72,8 @@ if __name__ == '__main__':
         cropped_path = f'{cropped_folder}/{filename}'
         crop_iterator+=crop_iterator_generator(file,cropped_path)
         train_ds_path = f'{train_ds_folder}/{filename}'
-        crop_iterator+=crop_iterator_generator(file,train_ds_path,train_ds=True)
+        if index%sampling==0:
+            crop_iterator+=crop_iterator_generator(file,train_ds_path,train_ds=True)
         masked_path = f'{masked_folder}/{filename}'
         background_image=None
         if background_image_path is not None:
@@ -79,6 +83,7 @@ if __name__ == '__main__':
             crop_iterator+=crop_iterator_generator(inputs_path,inputs_path)
         mask_iterator.append((file,masked_path,None))
         crop_iterator+=crop_iterator_generator(masked_path,masked_path)
+        index+=1
     print("Masking images...")
     with tqdm(total=len(mask_iterator)) as mask_pbar:
         # mask_iterator=[mask_iterator[0]]

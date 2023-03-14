@@ -2,7 +2,6 @@ import cv2
 import mediapipe as mp
 import numpy as np
 import os
-import glob
 import argparse
 
 mp_drawing = mp.solutions.drawing_utils
@@ -11,7 +10,7 @@ mp_selfie_segmentation = mp.solutions.selfie_segmentation
 BG_COLOR = (0, 0, 0) # black
 MASK_COLOR = (255, 255, 255) # white
 
-def mask(path:str,output_path:str):
+def mask(path:str,output_path:str,background_image:np.ndarray=None):
     with mp_selfie_segmentation.SelfieSegmentation(
         model_selection=0) as selfie_segmentation:
         image = cv2.imread(path)
@@ -21,9 +20,13 @@ def mask(path:str,output_path:str):
         condition = np.stack((results.segmentation_mask,) * 3, axis=-1) > 0.1
         fg_image = np.zeros(image.shape, dtype=np.uint8)
         fg_image[:] = MASK_COLOR
-        bg_image = np.zeros(image.shape, dtype=np.uint8)
-        bg_image[:] = BG_COLOR
-        output_image = np.where(condition, fg_image, bg_image)
+        if background_image is None:
+            bg_image = np.zeros(image.shape, dtype=np.uint8)
+            bg_image[:] = BG_COLOR
+            output_image = np.where(condition, fg_image, bg_image)
+        else:
+            bg_image = cv2.resize(background_image, (image_width, image_height))
+            output_image = np.where(condition, image, bg_image)
         cv2.imwrite(f'{output_path}', output_image)
 
 

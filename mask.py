@@ -3,6 +3,7 @@ import mediapipe as mp
 import numpy as np
 import os
 import argparse
+from PIL import Image
 
 mp_drawing = mp.solutions.drawing_utils
 mp_selfie_segmentation = mp.solutions.selfie_segmentation
@@ -13,7 +14,9 @@ MASK_COLOR = (255, 255, 255) # white
 def mask(path:str,output_path:str,background_image:np.ndarray=None):
     with mp_selfie_segmentation.SelfieSegmentation(
         model_selection=0) as selfie_segmentation:
-        image = cv2.imread(path)
+        # image = cv2.imread(path)
+        image = Image.open(path)
+        image = np.array(image)
         image_height, image_width, _ = image.shape
         results = selfie_segmentation.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
         blurred_image = cv2.GaussianBlur(image,(255,255),0)
@@ -25,6 +28,7 @@ def mask(path:str,output_path:str,background_image:np.ndarray=None):
             bg_image[:] = BG_COLOR
             output_image = np.where(condition, fg_image, bg_image)
         else:
+            np.array(background_image)
             bg_image = cv2.resize(background_image, (image_width, image_height))
             output_image = np.where(condition, image, bg_image)
         cv2.imwrite(f'{output_path}', output_image)

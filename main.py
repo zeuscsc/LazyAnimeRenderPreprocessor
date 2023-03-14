@@ -1,7 +1,7 @@
 import argparse
 import subprocess
 import os
-import cv2
+from PIL import Image
 import glob
 from mask import mask
 from crop import crop
@@ -44,8 +44,8 @@ if __name__ == '__main__':
     mask_iterator=[]
     for file in tqdm(files):
         filename = os.path.basename(file)
-        image = cv2.imread(file)
-        image_height, image_width, _ = image.shape
+        image = Image.open(file)
+        image_width,image_height = image.size
         cropped_path = f'{cropped_folder}/{filename}'
         if image_height > image_width:
             # crop(file,cropped_path,512,768)
@@ -59,7 +59,7 @@ if __name__ == '__main__':
         masked_path = f'{masked_folder}/{filename}'
         background_image=None
         if background_image_path is not None:
-            background_image = cv2.imread(background_image_path)
+            background_image=Image.open(background_image_path)
             inputs_path = f'{inputs_folder}/{filename}'
             mask_iterator.append((cropped_path,inputs_path,background_image))
             # mask(cropped_path,inputs_path,background_image)

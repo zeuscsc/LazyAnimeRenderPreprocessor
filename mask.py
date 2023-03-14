@@ -18,10 +18,9 @@ def mask(path:str,output_path:str,background_image_path:str=None):
     with mp_selfie_segmentation.SelfieSegmentation(
         model_selection=0) as selfie_segmentation:
         image = Image.open(path)
-        # ImageDraw.floodfill(image, (1,1), (0,255,0), thresh=50)
-        ImageDraw.floodfill(image, (1476, 966), (0,255,0), thresh=25)
-        ImageDraw.floodfill(image, (1510, 897), (0,255,0), thresh=25)
-        ImageDraw.floodfill(image, (1781, 910), (0,255,0), thresh=25)
+        # ImageDraw.floodfill(image, (1476, 966), (0,255,0), thresh=25)
+        # ImageDraw.floodfill(image, (1510, 897), (0,255,0), thresh=25)
+        # ImageDraw.floodfill(image, (1781, 910), (0,255,0), thresh=25)
         image = np.array(image)
         image_height, image_width, _ = image.shape
         results = selfie_segmentation.process(image)

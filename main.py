@@ -41,6 +41,7 @@ if __name__ == '__main__':
     inputs_folder = base_name+"/inputs"
     masked_folder = base_name+"/masked"
     cropped_folder = base_name+"/cropped"
+    train_ds_folder = base_name+"/train_ds"
     if not os.path.exists(raw_folder):
         os.makedirs(raw_folder)
         cmd = f'ffmpeg -i "{video_path}" "{raw_folder}/%04d.png"'
@@ -52,6 +53,8 @@ if __name__ == '__main__':
         os.makedirs(cropped_folder)
     if not os.path.exists(inputs_folder):
         os.makedirs(inputs_folder)
+    if not os.path.exists(train_ds_folder):
+        os.makedirs(train_ds_folder)
     print("Preparing threads queue...")
     crop_iterator=[]
     mask_iterator=[]
@@ -61,6 +64,7 @@ if __name__ == '__main__':
             REFRENCE_IMAGE = Image.open(file)
         cropped_path = f'{cropped_folder}/{filename}'
         crop_iterator+=crop_iterator_generator(file,cropped_path)
+        crop_iterator+=crop_iterator_generator(file,train_ds_folder,True)
         masked_path = f'{masked_folder}/{filename}'
         background_image=None
         if background_image_path is not None:

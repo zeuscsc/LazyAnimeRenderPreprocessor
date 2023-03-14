@@ -14,7 +14,19 @@ def mask_pbar_wrapper(*args):
 def crop_pbar_wrapper(*args):
     crop(*args)
     crop_pbar.update(1)
-
+def crop_iterator_generator(file,output_path,square=False):
+    crop_iterator=[]
+    image_height=image_width=768
+    if square is False:
+        image = Image.open(file)
+        image_width,image_height = image.size
+    if image_height > image_width:
+        crop_iterator.append((file,output_path,512,768))
+    if image_height < image_width:
+        crop_iterator.append((file,output_path,768,512))
+    if image_height == image_width or square:
+        crop_iterator.append((file,output_path,768,768))
+    return crop_iterator
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -44,30 +56,20 @@ if __name__ == '__main__':
     mask_iterator=[]
     for file in tqdm(files):
         filename = os.path.basename(file)
-        image = Image.open(file)
-        image_width,image_height = image.size
         cropped_path = f'{cropped_folder}/{filename}'
-        if image_height > image_width:
-            # crop(file,cropped_path,512,768)
-            crop_iterator.append((file,cropped_path,512,768))
-        if image_height < image_width:
-            # crop(file,cropped_path,768,512)
-            crop_iterator.append((file,cropped_path,768,512))
-        if image_height == image_width:
-            # crop(file,cropped_path,768,768)
-            crop_iterator.append((file,cropped_path,768,768))
+        crop_iterator+=crop_iterator_generator(file,cropped_path,True)
         masked_path = f'{masked_folder}/{filename}'
         background_image=None
         if background_image_path is not None:
             background_image=Image.open(background_image_path)
             inputs_path = f'{inputs_folder}/{filename}'
-            mask_iterator.append((cropped_path,inputs_path,background_image))
-            # mask(cropped_path,inputs_path,background_image)
-        mask_iterator.append((cropped_path,masked_path,None))
-        # mask(cropped_path,masked_path,None)
-    print("Cropping images...")
-    with tqdm(total=len(crop_iterator)) as crop_pbar:
-        build_and_execute(crop_iterator,crop_pbar_wrapper,16,True,0)
+            mask_iterator.append((file,inputs_path,background_image))
+            crop_iterator+=crop_iterator_generator(inputs_path,inputs_path,True)
+        mask_iterator.append((file,masked_path,None))
+        crop_iterator+=crop_iterator_generator(masked_path,masked_path,True)
     print("Masking images...")
     with tqdm(total=len(mask_iterator)) as mask_pbar:
         build_and_execute(mask_iterator,mask_pbar_wrapper,16,True,0)
+    print("Cropping images...")
+    with tqdm(total=len(crop_iterator)) as crop_pbar:
+        build_and_execute(crop_iterator,crop_pbar_wrapper,16,True,0)

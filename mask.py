@@ -14,12 +14,10 @@ MASK_COLOR = (255, 255, 255) # white
 def mask(path:str,output_path:str,background_image:np.ndarray=None):
     with mp_selfie_segmentation.SelfieSegmentation(
         model_selection=0) as selfie_segmentation:
-        # image = cv2.imread(path)
         image = Image.open(path)
         image = np.array(image)
         image_height, image_width, _ = image.shape
-        results = selfie_segmentation.process(cv2.cvtColor(image, cv2.COLOR_BGR2RGB))
-        blurred_image = cv2.GaussianBlur(image,(255,255),0)
+        results = selfie_segmentation.process(image)
         condition = np.stack((results.segmentation_mask,) * 3, axis=-1) > 0.1
         fg_image = np.zeros(image.shape, dtype=np.uint8)
         fg_image[:] = MASK_COLOR
@@ -31,7 +29,8 @@ def mask(path:str,output_path:str,background_image:np.ndarray=None):
             np.array(background_image)
             bg_image = cv2.resize(background_image, (image_width, image_height))
             output_image = np.where(condition, image, bg_image)
-        cv2.imwrite(f'{output_path}', output_image)
+        # cv2.imwrite(f'{output_path}', output_image)
+        Image.fromarray(output_image).save(f'{output_path}')
 
 
 if __name__ == '__main__':

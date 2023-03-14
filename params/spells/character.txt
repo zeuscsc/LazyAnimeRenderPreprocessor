@@ -8,3 +8,4 @@ Negative prompt: (longbody),(extra fingers), (missing fingers), (extra limb), (b
 Steps: 20, Sampler: Euler a, CFG scale: 7, Seed: 1840723039, Size: 512x512, Model hash: 99d9ce8a35, Model: El Diablo, Denoising strength: 0.55, Mask blur: 4, ControlNet Enabled: True, ControlNet Module: openpose, ControlNet Model: control_sd15_openpose [fef5e48e], ControlNet Weight: 1.5, ControlNet Guidance Strength: False
 
 
+best quality, perfect lighting, shiny skin, manga, single girl , looking at the viewer, black  meeting room, golden black magical medival armor, exposed belly,white hair, golden eyes,long hair,pointy ears,

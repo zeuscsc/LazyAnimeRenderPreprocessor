@@ -37,10 +37,10 @@ if __name__ == '__main__':
     video_path=args.video_path
     background_image_path=args.background_image_path
     base_name, extension = os.path.splitext(video_path)
-    raw_folder = base_name+"_frames/raw"
-    inputs_folder = base_name+"_frames/inputs"
-    masked_folder = base_name+"_frames/masked"
-    cropped_folder = base_name+"_frames/cropped"
+    raw_folder = base_name+"/raw"
+    inputs_folder = base_name+"/inputs"
+    masked_folder = base_name+"/masked"
+    cropped_folder = base_name+"/cropped"
     if not os.path.exists(raw_folder):
         os.makedirs(raw_folder)
         cmd = f'ffmpeg -i "{video_path}" "{raw_folder}/%04d.png"'
@@ -64,15 +64,17 @@ if __name__ == '__main__':
         masked_path = f'{masked_folder}/{filename}'
         background_image=None
         if background_image_path is not None:
-            background_image=Image.open(background_image_path)
+            
             inputs_path = f'{inputs_folder}/{filename}'
-            mask_iterator.append((file,inputs_path,background_image))
+            mask_iterator.append((file,inputs_path,background_image_path))
             crop_iterator+=crop_iterator_generator(inputs_path,inputs_path)
         mask_iterator.append((file,masked_path,None))
         crop_iterator+=crop_iterator_generator(masked_path,masked_path)
     print("Masking images...")
     with tqdm(total=len(mask_iterator)) as mask_pbar:
+        # mask_iterator=[mask_iterator[0]]
         build_and_execute(mask_iterator,mask_pbar_wrapper,16,True,0)
+        # exit()
     print("Cropping images...")
     with tqdm(total=len(crop_iterator)) as crop_pbar:
         build_and_execute(crop_iterator,crop_pbar_wrapper,16,True,0)

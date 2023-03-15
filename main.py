@@ -38,8 +38,10 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument("--video_path","-f", type=str, default=None,help="video path")
     parser.add_argument("--background_image_path","-b", type=str, default=None,help="video path")
+    parser.add_argument("--mask_background","-m", action="store_true")
     args = parser.parse_args()
     video_path=args.video_path
+    mask_background=args.mask_background
     background_image_path=args.background_image_path
     base_name, extension = os.path.splitext(video_path)
     raw_folder = base_name+"/raw"
@@ -77,9 +79,11 @@ if __name__ == '__main__':
         masked_path = f'{masked_folder}/{filename}'
         background_image=None
         if background_image_path is not None:
-            
             inputs_path = f'{inputs_folder}/{filename}'
-            mask_iterator.append((file,inputs_path,background_image_path))
+            if mask_background:
+                mask_iterator.append((file,inputs_path,background_image_path,True))
+            else:
+                mask_iterator.append((file,inputs_path,background_image_path))
             crop_iterator+=crop_iterator_generator(inputs_path,inputs_path)
         mask_iterator.append((file,masked_path,None))
         crop_iterator+=crop_iterator_generator(masked_path,masked_path)

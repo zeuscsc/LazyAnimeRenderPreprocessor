@@ -90,9 +90,9 @@ if __name__ == '__main__':
         index+=1
     print("Masking images...")
     with tqdm(total=len(mask_iterator)) as mask_pbar:
-        # mask_iterator=[mask_iterator[0]]
-        build_and_execute(mask_iterator,mask_pbar_wrapper,16,True,0)
+        # mask_pbar_wrapper(*mask_iterator[0])
         # exit()
+        build_and_execute(mask_iterator,mask_pbar_wrapper,16,True,0)
     print("Cropping images...")
     with tqdm(total=len(crop_iterator)) as crop_pbar:
         build_and_execute(crop_iterator,crop_pbar_wrapper,16,True,0)

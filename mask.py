@@ -43,7 +43,9 @@ def mask(path:str,output_path:str,background_image_path:str=None,mask_background
             output_image = np.where(condition, image, bg_image)
         else:
             background_image=Image.open(background_image_path)
-            output_image=background_image.convert("RGB")
+            background_image=background_image.convert("RGB")
+            background_image=np.array(background_image)
+            output_image=background_image
 
         Image.fromarray(output_image).save(f'{output_path}')
 

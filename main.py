@@ -39,10 +39,12 @@ if __name__ == '__main__':
     parser.add_argument("--video_path","-f", type=str, default=None,help="video path")
     parser.add_argument("--background_image_path","-b", type=str, default=None,help="video path")
     parser.add_argument("--mask_background","-m", action="store_true")
+    parser.add_argument("--convert2binary","-B", action="store_true")
     args = parser.parse_args()
     video_path=args.video_path
     mask_background=args.mask_background
     background_image_path=args.background_image_path
+    convert2binary=args.convert2binary
     base_name, extension = os.path.splitext(video_path)
     raw_folder = base_name+"/raw"
     inputs_folder = base_name+"/inputs"
@@ -81,11 +83,11 @@ if __name__ == '__main__':
         if background_image_path is not None:
             inputs_path = f'{inputs_folder}/{filename}'
             if mask_background:
-                mask_iterator.append((file,inputs_path,background_image_path,True))
+                mask_iterator.append((file,inputs_path,background_image_path,True,convert2binary))
             else:
-                mask_iterator.append((file,inputs_path,background_image_path))
+                mask_iterator.append((file,inputs_path,background_image_path,False,convert2binary))
             crop_iterator+=crop_iterator_generator(inputs_path,inputs_path)
-        mask_iterator.append((file,masked_path,None))
+        mask_iterator.append((file,masked_path,None,False,convert2binary))
         crop_iterator+=crop_iterator_generator(masked_path,masked_path)
         index+=1
     print("Masking images...")

@@ -13,7 +13,7 @@ MASK_COLOR = (255, 255, 255) # white
 
 last_frame = None
 
-def mask(path:str,output_path:str,background_image_path:str=None,mask_background:bool=False):
+def mask(path:str,output_path:str,background_image_path:str=None,mask_background:bool=False,convert2binary:bool=False):
     global last_frame
     with mp_selfie_segmentation.SelfieSegmentation(
         model_selection=0) as selfie_segmentation:
@@ -31,8 +31,10 @@ def mask(path:str,output_path:str,background_image_path:str=None,mask_background
             bg_image = np.zeros(image.shape, dtype=np.uint8)
             bg_image[:] = BG_COLOR
             output_image = np.where(condition, fg_image, bg_image)
-            if last_frame is not None:
-                output_image=cv2.bitwise_or(output_image,last_frame)
+            # if last_frame is not None:
+            #     output_image=cv2.bitwise_or(output_image,last_frame)
+            if convert2binary:
+                ret,output_image=cv2.threshold(image,127,255,cv2.THRESH_BINARY)
                 
             last_frame=np.where(condition, fg_image, bg_image)
         elif mask_background:
@@ -46,7 +48,6 @@ def mask(path:str,output_path:str,background_image_path:str=None,mask_background
             background_image=background_image.convert("RGB")
             background_image=np.array(background_image)
             output_image=background_image
-
         Image.fromarray(output_image).save(f'{output_path}')
 
 

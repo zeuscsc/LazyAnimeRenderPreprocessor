@@ -65,7 +65,7 @@ if __name__ == '__main__':
     if not os.path.exists(train_ds_folder):
         os.makedirs(train_ds_folder)
     print("Preparing threads queue...")
-    sampling=floor(len(files)/40)
+    sampling=floor(len(files)/80)
     index=0
     crop_iterator=[]
     mask_iterator=[]
